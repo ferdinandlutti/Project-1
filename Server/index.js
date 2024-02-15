@@ -3,7 +3,7 @@ const express = require("express"),
   mongoose = require("mongoose");
 app.use(require("cors")());
 require("dotenv").config();
-const port = process.env.PORT || 5050;
+const port = process.env.PORT;
 
 // to print incoming requests from mongoose in the terminal
 mongoose.set("debug", true);
@@ -54,6 +54,13 @@ const adminOptions = {
 };
 const classRouter = require("./routes/classes");
 app.use("/class", classRouter);
+
+const userRouter = require("./routes/users");
+app.use("/user", userRouter);
+const bookingRouter = require("./routes/booking");
+app.use("/booking", bookingRouter);
+const reviewRouter = require("./routes/reviews");
+app.use("/review", reviewRouter);
 
 // initialize adminjs
 const admin = new AdminJS(adminOptions);

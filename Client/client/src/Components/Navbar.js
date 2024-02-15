@@ -1,23 +1,59 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-function Navbar() {
+const Navbar = ({ isLoggedIn }) => {
   return (
-    <ul className="nav">
-      <li>
-        <Link to="/">Home</Link>
-      </li>
-      <li>
-        <Link to="/add_category">Add category</Link>
-      </li>
-      <li>
-        <Link to="/display_categories">display categories</Link>
-      </li>
-      <li>
-        <Link to="/add_product">Add product</Link>
-      </li>
-    </ul>
+    <div className="navbar">
+      <NavLink
+        to={"/"}
+        style={({ isActive }) =>
+          isActive ? linkStyles.activeLink : linkStyles.defaultLink
+        }
+      >
+        Home
+      </NavLink>
+
+      {isLoggedIn === false && (
+        <>
+          <NavLink
+            to="/register"
+            style={({ isActive }) =>
+              isActive ? linkStyles.activeLink : linkStyles.defaultLink
+            }
+          >
+            Register
+          </NavLink>
+          <NavLink
+            to="/login"
+            style={({ isActive }) =>
+              isActive ? linkStyles.activeLink : linkStyles.defaultLink
+            }
+          >
+            Login
+          </NavLink>
+        </>
+      )}
+
+      <NavLink
+        to="/secret-page"
+        style={({ isActive }) =>
+          isActive ? linkStyles.activeLink : linkStyles.defaultLink
+        }
+      >
+        Secret
+      </NavLink>
+    </div>
   );
-}
+};
 
 export default Navbar;
+
+const linkStyles = {
+  activeLink: {
+    color: "gray",
+  },
+  defaultLink: {
+    textDecoration: "none",
+    color: "white",
+  },
+};

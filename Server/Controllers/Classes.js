@@ -3,7 +3,7 @@ const Classes = require("../Schemas/classes");
 // show all classes
 const allClasses = async (req, res) => {
   try {
-    const classes = await Classes.find({}); // Find all documents in the Categories collection
+    const classes = await Classes.find({});
     res.send({
       ok: true,
       data: classes,
@@ -69,10 +69,12 @@ const getClassById = async (req, res) => {
     res.send({ message: "Error fetching class details" });
   }
 };
+
+// update class
 const updateClass = async (req, res) => {
   const classId = req.params.id;
   const updateData = req.body; // Data to update the class with
-
+  console.log(classId);
   try {
     // Find the class by ID and update it with the new data
     // { new: true } option returns the updated document
@@ -81,11 +83,35 @@ const updateClass = async (req, res) => {
     })
       .populate("category_id")
       .populate("instructorId");
-  } catch (error) {}
+    if (!updatedClass) {
+      return res.send({ ok: false, message: "Class not found" });
+    }
+    res.send({ ok: true, data: updatedClass });
+  } catch (error) {
+    res
+      .status(500)
+      .send({ ok: false, message: "Error updating class details" });
+  }
+};
+const deleteClass = async (req, res) => {
+  const classId = req.params.id;
+  try {
+    const deletedClass = await Classes.findByIdAndDelete(classId);
+
+    if (!deletedClass) {
+      return res.send({ ok: false, message: "Class not found" });
+    }
+
+    res.send({ ok: true, message: "Class deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting class:", error);
+    res.send({ ok: false, message: "Error deleting class" });
+  }
 };
 module.exports = {
   allClasses,
   addClass,
   getClassById,
   updateClass,
+  deleteClass,
 };
