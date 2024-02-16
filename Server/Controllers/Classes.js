@@ -27,7 +27,7 @@ const getRecentClasses = async (req, res) => {
 // Add a class
 const addClass = async (req, res) => {
   try {
-    const instructorId = req.user.id;
+    const instructorId = req.user._id;
 
     const {
       category_id,
@@ -86,11 +86,9 @@ const getClassById = async (req, res) => {
 // update class
 const updateClass = async (req, res) => {
   const classId = req.params.id;
-  const updateData = req.body; // Data to update the class with
+  const updateData = req.body;
   console.log(classId);
   try {
-    // Find the class by ID and update it with the new data
-    // { new: true } option returns the updated document
     const updatedClass = await Classes.findByIdAndUpdate(classId, updateData, {
       new: true,
     })

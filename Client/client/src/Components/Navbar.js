@@ -37,7 +37,7 @@ const Navbar = ({ isLoggedIn, userType, logout }) => {
       )}
       {isLoggedIn && userType === "instructor" && (
         <NavLink
-          to="/secret-page"
+          to="/instructor"
           style={({ isActive }) =>
             isActive ? linkStyles.activeLink : linkStyles.defaultLink
           }

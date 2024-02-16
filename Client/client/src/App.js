@@ -15,6 +15,7 @@ import Dashboard from "./views/Dashboard";
 import { URL } from "./config";
 import * as jose from "jose";
 import ClassesByCategory from "./Components/ClassesByCategory";
+import CreateClass from "./Components/CreateClass";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -68,6 +69,9 @@ function App() {
           path="/category/by-category/:categoryId"
           element={<ClassesByCategory />}
         />
+        <Route path="/instructor" element={<Dashboard />}>
+          <Route path="classes" element={<CreateClass />} />
+        </Route>
 
         <Route
           path="/login"

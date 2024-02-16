@@ -66,7 +66,7 @@ const login = async (req, res) => {
     if (match) {
       // once user is verified and confirmed we send back the token to keep in localStorage in the client and in this token we can add some data -- payload -- to retrieve from the token in the client and see, for example, which user is logged in exactly. The payload would be the first argument in .sign() method. In the following example we are sending an object with key userEmail and the value of email coming from the "user" found in line 47
       const token = jwt.sign(
-        { userEmail: user.email, userType: user.type },
+        { userEmail: user.email, userType: user.type, userId: user._id },
         jwt_secret,
         {
           expiresIn: "1h",
@@ -182,7 +182,7 @@ const getNormalUsers = async (req, res) => {
 };
 const authenticate = async (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1]; // "Bearer <token>"
+    const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
       return res
         .status(401)
@@ -195,7 +195,7 @@ const authenticate = async (req, res, next) => {
       return res.status(404).json({ ok: false, message: "User not found" });
     }
 
-    req.user = user; // Attach the user to the request object
+    req.user = user;
     next();
   } catch (error) {
     return res
