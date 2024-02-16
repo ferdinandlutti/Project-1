@@ -3,6 +3,9 @@ router = express.Router();
 const controller = require("../Controllers/Classes");
 
 router.get("/allclasses", controller.allClasses);
+
+router.get("/recent", controller.getRecentClasses);
+
 router.get("/:id", controller.getClassById);
 
 router.post("/add", controller.addClass);

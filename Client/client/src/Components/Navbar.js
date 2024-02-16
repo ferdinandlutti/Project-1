@@ -1,7 +1,9 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
-const Navbar = ({ isLoggedIn }) => {
+const Navbar = ({ isLoggedIn, userType, logout }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="navbar">
       <NavLink
@@ -13,7 +15,7 @@ const Navbar = ({ isLoggedIn }) => {
         Home
       </NavLink>
 
-      {isLoggedIn === false && (
+      {!isLoggedIn && (
         <>
           <NavLink
             to="/register"
@@ -33,15 +35,27 @@ const Navbar = ({ isLoggedIn }) => {
           </NavLink>
         </>
       )}
-
-      <NavLink
-        to="/secret-page"
-        style={({ isActive }) =>
-          isActive ? linkStyles.activeLink : linkStyles.defaultLink
-        }
-      >
-        Secret
-      </NavLink>
+      {isLoggedIn && userType === "instructor" && (
+        <NavLink
+          to="/secret-page"
+          style={({ isActive }) =>
+            isActive ? linkStyles.activeLink : linkStyles.defaultLink
+          }
+        >
+          Secret
+        </NavLink>
+      )}
+      {isLoggedIn && (
+        <button
+          onClick={() => {
+            logout();
+            navigate("/"); // Navigate to home page after logout
+          }}
+          style={linkStyles.defaultLink} // Apply your link styles here
+        >
+          Logout
+        </button>
+      )}
     </div>
   );
 };

@@ -11,9 +11,10 @@ import Navbar from "./Components/Navbar";
 import Home from "./views/Home";
 import Register from "./views/Register";
 import Login from "./views/Login";
-import SecretPage from "./views/secretPage";
+import Dashboard from "./views/Dashboard";
 import { URL } from "./config";
 import * as jose from "jose";
+import ClassesByCategory from "./Components/ClassesByCategory";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -40,7 +41,6 @@ function App() {
   }, [token]);
 
   const login = (token) => {
-    debugger;
     let decodedToken = jose.decodeJwt(token);
     console.log(decodedToken);
     // composing a user object based on what data we included in our token (login controller - jwt.sign() first argument)
@@ -61,9 +61,14 @@ function App() {
 
   return (
     <Router>
-      <Navbar isLoggedIn={isLoggedIn} />
+      <Navbar isLoggedIn={isLoggedIn} userType={user?.type} logout={logout} />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route
+          path="/category/by-category/:categoryId"
+          element={<ClassesByCategory />}
+        />
+
         <Route
           path="/login"
           element={
@@ -93,7 +98,7 @@ function App() {
           path="/secret-page"
           element={
             isLoggedIn && user?.type === "instructor" ? (
-              <SecretPage logout={logout} user={user} />
+              <Dashboard logout={logout} user={user} />
             ) : (
               <Navigate to="/" />
             )

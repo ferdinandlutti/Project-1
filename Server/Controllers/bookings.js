@@ -68,10 +68,52 @@ const deleteBooking = async (req, res) => {
     res.status(500).json({ ok: false, message: "Error deleting booking" });
   }
 };
+const getBookingsByClass = async (req, res) => {
+  const { classId } = req.params; // Extract classId from URL parameters
+
+  try {
+    const bookings = await Booking.find({ classId }).populate(
+      "userId",
+      "email"
+    ); // Example: Populating user email. Adjust as needed.
+    res.json({ ok: true, data: bookings });
+  } catch (error) {
+    console.error("Error fetching bookings for class:", error);
+    res
+      .status(500)
+      .json({ ok: false, message: "Error fetching bookings for class", error });
+  }
+};
+const updateBookingStatus = async (req, res) => {
+  const { bookingId } = req.params; // Get the booking ID from URL parameters
+  const { status } = req.body; // Get the new status from the request body
+
+  try {
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      bookingId,
+      { status },
+      { new: true, runValidators: true } // Return the updated booking and ensure schema validators run
+    )
+      .populate("classId")
+      .populate("userId"); // Populate related fields if needed
+
+    if (!updatedBooking) {
+      return res.status(404).json({ ok: false, message: "Booking not found" });
+    }
+
+    res.json({ ok: true, data: updatedBooking });
+  } catch (error) {
+    console.error("Error updating booking status:", error);
+    res
+      .status(500)
+      .json({ ok: false, message: "Error updating booking status", error });
+  }
+};
 
 module.exports = {
   createBooking,
   deleteBooking,
-  //   updateBookingstatus,
+  getBookingsByClass,
+  updateBookingStatus,
   //   getAllBookings,
 };

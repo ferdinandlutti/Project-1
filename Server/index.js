@@ -61,6 +61,8 @@ const bookingRouter = require("./routes/booking");
 app.use("/booking", bookingRouter);
 const reviewRouter = require("./routes/reviews");
 app.use("/review", reviewRouter);
+const categoriesRouter = require("./routes/categories");
+app.use("/category", categoriesRouter);
 
 // initialize adminjs
 const admin = new AdminJS(adminOptions);

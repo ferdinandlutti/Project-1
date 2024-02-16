@@ -12,11 +12,24 @@ const allClasses = async (req, res) => {
     console.log(error);
   }
 };
+// Get recent classes (3)
+const getRecentClasses = async (req, res) => {
+  try {
+    const classes = await Classes.find({}).sort({ createdAt: -1 }).limit(3);
+    res.send({
+      ok: true,
+      data: classes,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 // Add a class
 const addClass = async (req, res) => {
   try {
+    const instructorId = req.user.id;
+
     const {
-      instructorId,
       category_id,
       title,
       description,
@@ -114,4 +127,5 @@ module.exports = {
   getClassById,
   updateClass,
   deleteClass,
+  getRecentClasses,
 };

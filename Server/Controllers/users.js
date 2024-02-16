@@ -180,7 +180,29 @@ const getNormalUsers = async (req, res) => {
       .send({ ok: false, message: "Error fetching normal user details" });
   }
 };
+const authenticate = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1]; // "Bearer <token>"
+    if (!token) {
+      return res
+        .status(401)
+        .json({ ok: false, message: "Authentication token required" });
+    }
 
+    const decoded = jwt.verify(token, jwt_secret);
+    const user = await User.findById(decoded.userId); // Assuming your JWT contains the userId
+    if (!user) {
+      return res.status(404).json({ ok: false, message: "User not found" });
+    }
+
+    req.user = user; // Attach the user to the request object
+    next();
+  } catch (error) {
+    return res
+      .status(401)
+      .json({ ok: false, message: "Invalid or expired token" });
+  }
+};
 module.exports = {
   register,
   login,
@@ -191,4 +213,5 @@ module.exports = {
   getAllUsers,
   getInstructors,
   getNormalUsers,
+  authenticate,
 };
