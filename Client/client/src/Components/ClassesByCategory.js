@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 function ClassesByCategory() {
   const { categoryId } = useParams();
@@ -12,20 +13,16 @@ function ClassesByCategory() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const categoryResponse = await fetch(
+        const categoryResponse = await axios.get(
           `http://localhost:5010/category/${categoryId}`
         );
-        if (!categoryResponse.ok) throw new Error("Failed to fetch category");
-        const categoryData = await categoryResponse.json();
-        setCategoryName(categoryData.data.category); // Adjust based on your API response structure
+        setCategoryName(categoryResponse.data.data.category);
 
         // Fetch classes by category
-        const classesResponse = await fetch(
+        const classesResponse = await axios.get(
           `http://localhost:5010/category/by-category/${categoryId}`
         );
-        if (!classesResponse.ok) throw new Error("Failed to fetch classes");
-        const classesData = await classesResponse.json();
-        setClasses(classesData.data);
+        setClasses(classesResponse.data.data);
       } catch (error) {
         setError(error.message);
       } finally {
