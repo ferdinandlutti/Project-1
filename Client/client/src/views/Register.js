@@ -24,7 +24,7 @@ const Register = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(`${URL}/user/register`); // Check this URL is correct
+      console.log(`${URL}/user/register`);
 
       const response = await axios.post(`${URL}/user/register`, {
         email: form.email,
@@ -37,7 +37,7 @@ const Register = (props) => {
       if (response.data.ok) {
         setTimeout(() => {
           props.login(response.data.token, response.data.user);
-          navigate("/secret-page");
+          navigate("/");
         }, 2000);
       }
     } catch (error) {

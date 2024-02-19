@@ -34,7 +34,7 @@ const Login = (props) => {
         );
         setTimeout(() => {
           props.login(response.data.token, response.data.user);
-          navigate("/secret-page");
+          navigate("/");
         }, 2000);
       }
     } catch (error) {

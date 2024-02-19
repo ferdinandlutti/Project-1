@@ -78,7 +78,7 @@ function App() {
           element={
             isLoggedIn ? (
               <Navigate
-                to={user?.type === "instructor" ? "/secret-page" : "/"}
+                to={user?.type === "instructor" ? "/instructor" : "/"}
               />
             ) : (
               <Login login={login} />
@@ -92,14 +92,14 @@ function App() {
               <Register login={login} />
             ) : (
               <Navigate
-                to={user?.type === "instructor" ? "/secret-page" : "/"}
+                to={user?.type === "instructor" ? "/instructor" : "/"}
               />
             )
           }
         />
 
         <Route
-          path="/secret-page"
+          path="/instructor"
           element={
             isLoggedIn && user?.type === "instructor" ? (
               <Dashboard logout={logout} user={user} />
