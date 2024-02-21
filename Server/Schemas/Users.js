@@ -2,11 +2,14 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    // name: { type: String, required: true },
+    // surname: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     type: { type: String, required: true, default: "user" },
+    profilePicture: { type: String },
   },
-  { strictQuery: false }
+  { strictQuery: false, timestamps: true }
 );
 module.exports = mongoose.model("user", userSchema);
 
@@ -20,7 +23,6 @@ module.exports = mongoose.model("user", userSchema);
 // location: { type: String, default: "" },
 
 // Instructor-specific fields
-//   completedClassesCount: { type: Number, default: 0 },
 //   classSchedule: [{ type: mongoose.Schema.Types.ObjectId, ref: "class" }],
 //   rating: { type: Number, default: 0, min: 0, max: 5 },
 //   bio: { type: String, default: "" },

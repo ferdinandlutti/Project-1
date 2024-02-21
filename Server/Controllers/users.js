@@ -111,8 +111,6 @@ const updateUser = async (req, res) => {
   const updateData = req.body; // Data to update the class with
   console.log(userId);
   try {
-    // Find the class by ID and update it with the new data
-    // { new: true } option returns the updated document
     const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
       new: true,
     });
@@ -195,7 +193,7 @@ const authenticate = async (req, res, next) => {
       return res.status(404).json({ ok: false, message: "User not found" });
     }
 
-    req.user = user;
+    req.userId = user._id; // Setting userId for access in subsequent middleware/routes
     next();
   } catch (error) {
     return res

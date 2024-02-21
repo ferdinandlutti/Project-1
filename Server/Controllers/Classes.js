@@ -1,4 +1,5 @@
 const Classes = require("../Schemas/classes");
+const User = require("../Schemas/Users");
 
 // show all classes
 const allClasses = async (req, res) => {
@@ -27,7 +28,7 @@ const getRecentClasses = async (req, res) => {
 // Add a class
 const addClass = async (req, res) => {
   try {
-    const instructorId = req.user._id;
+    const instructorId = req.userId;
 
     const {
       category_id,
@@ -83,6 +84,29 @@ const getClassById = async (req, res) => {
   }
 };
 
+const getInstructorClasses = async (req, res) => {
+  try {
+    const instructorId = req.params.id; // or req.params.id if you're getting the ID from the route parameter
+    console.log(instructorId);
+    const instructorClasses = await Classes.find({ instructorId }).populate(
+      "category_id"
+    ); // Assuming you want to include details of the category
+
+    if (!instructorClasses || instructorClasses.length === 0) {
+      return res
+        .status(404)
+        .json({ ok: false, message: "No classes found for this instructor." });
+    }
+
+    res.json({ ok: true, data: instructorClasses });
+  } catch (error) {
+    console.error("Error fetching instructor classes:", error);
+    res
+      .status(500)
+      .json({ ok: false, message: "Error fetching instructor classes" });
+  }
+};
+
 // update class
 const updateClass = async (req, res) => {
   const classId = req.params.id;
@@ -126,4 +150,5 @@ module.exports = {
   updateClass,
   deleteClass,
   getRecentClasses,
+  getInstructorClasses,
 };

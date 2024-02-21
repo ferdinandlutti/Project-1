@@ -7,20 +7,26 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import Navbar from "./Components/Navbar";
+import Navbar from "./Components-Instructor/Navbar";
 import Home from "./views/Home";
 import Register from "./views/Register";
 import Login from "./views/Login";
 import Dashboard from "./views/Dashboard";
 import { URL } from "./config";
 import * as jose from "jose";
-import ClassesByCategory from "./Components/ClassesByCategory";
-import CreateClass from "./Components/CreateClass";
+import ClassesByCategory from "./Components-Instructor/ClassesByCategory";
+import CreateClass from "./Components-Instructor/CreateClass";
+import InstructorDetails from "./Components-Instructor/instructorDetails";
+import InstructorProfile from "./Components-Instructor/InstructorProfile";
+import UserProfile from "./Components-user/UserProfile";
+import UserBookings from "./Components-user/UserBookings";
+import UserSettings from "./Components-user/UserSettings";
+import ClassPage from "./Components-user/ClassPage";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
     const verify_token = async () => {
@@ -69,22 +75,29 @@ function App() {
           path="/category/by-category/:categoryId"
           element={<ClassesByCategory />}
         />
-        <Route path="/instructor" element={<Dashboard />}>
-          <Route path="classes" element={<CreateClass />} />
-        </Route>
+        <Route path="/class/:classId" element={<ClassPage />} />
+        <Route path="/instructor/dashboard" element={<Dashboard />}></Route>
+        <Route path="/instructor/classes" element={<CreateClass />} />
+        <Route path="/instructor/profile" element={<InstructorProfile />} />
 
         <Route
           path="/login"
           element={
             isLoggedIn ? (
               <Navigate
-                to={user?.type === "instructor" ? "/instructor" : "/"}
+                to={user?.type === "instructor" ? "/instructor/dashboard" : "/"}
               />
             ) : (
               <Login login={login} />
             )
           }
         />
+        <Route path="/instructor/details" element={<InstructorDetails />} />
+
+        <Route path="/user/bookings" element={<UserBookings />} />
+        <Route path="/user/profile" element={<UserProfile />} />
+        <Route path="/user/settings" element={<UserSettings />} />
+
         <Route
           path="/register"
           element={
@@ -92,14 +105,14 @@ function App() {
               <Register login={login} />
             ) : (
               <Navigate
-                to={user?.type === "instructor" ? "/instructor" : "/"}
+                to={user?.type === "instructor" ? "/instructor/dashboard" : "/"}
               />
             )
           }
         />
 
         <Route
-          path="/instructor"
+          path="/instructor/dashboard"
           element={
             isLoggedIn && user?.type === "instructor" ? (
               <Dashboard logout={logout} user={user} />

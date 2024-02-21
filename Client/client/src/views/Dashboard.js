@@ -1,84 +1,85 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, NavLink, Outlet } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+
 import("./dashboard.css");
 
 const Dashboard = (props) => {
-  const [classData, setClassData] = useState({
-    title: "",
-    description: "",
-    location: "",
-    date: "",
-    time: "",
-    duration: "",
-    capacity: "",
-    price: "",
-  });
-  const [categories, setCategories] = useState([]);
+  const [instructorClasses, setInstructorClasses] = useState([]);
+  const [instructorProfile, setInstructorProfile] = useState({});
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:5010/category/allcategories"
-        );
-        const data = await response.json();
-        if (data.ok) {
-          setCategories(data.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch categories:", error);
-      }
-    };
-    fetchCategories();
+    fetchInstructorClasses();
+    fetchInstructorProfile();
   }, []);
 
-  let navigate = useNavigate();
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setClassData({
-      ...classData,
-      [name]: value,
-    });
-  };
+  const fetchInstructorClasses = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You must be logged in to view this page");
+      navigate("/login");
+      return;
+    }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const token = JSON.parse(localStorage.getItem("token"));
+    const decodedToken = jwtDecode(token);
+    const instructorId = decodedToken.userId;
+
     try {
-      const response = await axios.post(
-        "http://localhost:5010/class/add",
-        classData,
+      const response = await axios.get(
+        `http://localhost:5010/class/byinstructor/${instructorId}`,
         {
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(classData),
         }
       );
-      console.log(response);
       if (response.data.ok) {
-        alert("Class created successfully");
+        setInstructorClasses(response.data.data);
       } else {
-        alert("Failed to create class");
+        alert("Failed to fetch classes");
       }
     } catch (error) {
-      console.error("Error creating class:", error);
-      alert("Error creating class");
+      console.error("Error fetching classes:", error);
+      alert("Error fetching classes");
     }
   };
+
+  const fetchInstructorProfile = async () => {
+    const token = localStorage.getItem("token");
+    const decodedToken = jwtDecode(token);
+    const instructorId = decodedToken.userId;
+
+    try {
+      const response = await axios.get(
+        `http://localhost:5010/instructor/${instructorId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.ok) {
+        setInstructorProfile(response.data.profile);
+      }
+    } catch (error) {
+      console.error("Failed to fetch instructor profile:", error);
+    }
+  };
+
   return (
     <div className="dashboard">
       <div className="sidebar">
         <NavLink
-          to="/instructor/home"
+          to="/instructor/dashboard"
           className={({ isActive }) => (isActive ? "active" : "")}
         >
           Home
         </NavLink>
         <NavLink
-          to="classes"
+          to="/instructor/classes"
           className={({ isActive }) => (isActive ? "active" : "")}
         >
           Classes
@@ -89,6 +90,20 @@ const Dashboard = (props) => {
         >
           Profile
         </NavLink>
+      </div>
+      <div className="content">
+        <h2>My Classes</h2>
+        {instructorClasses.length > 0 ? (
+          instructorClasses.map((classItem) => (
+            <div key={classItem._id}>
+              <h3>{classItem.title}</h3>
+              <p>{classItem.description}</p>
+              <p>{classItem.attendees}</p>
+            </div>
+          ))
+        ) : (
+          <p>No classes found.</p>
+        )}
       </div>
       <Outlet /> {/* React Router v6 Outlet for nested routes */}
     </div>

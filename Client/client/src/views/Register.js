@@ -14,12 +14,11 @@ const Register = (props) => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    if (type === "checkbox") {
-      setValues({ ...form, [name]: e.target.checked });
-    } else {
-      setValues({ ...form, [name]: value });
-    }
+    const { name, value, type, checked } = e.target;
+    setValues({
+      ...form,
+      [name]: type === "checkbox" ? checked : value,
+    });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,15 +29,19 @@ const Register = (props) => {
         email: form.email,
         password: form.password,
         password2: form.password2,
-        instructor: form.instructor, // Send the flag to the backend
+        instructor: form.instructor,
       });
-      console.log(response);
       setMessage(response.data.message);
-      if (response.data.ok) {
-        setTimeout(() => {
-          props.login(response.data.token, response.data.user);
-          navigate("/");
-        }, 2000);
+      localStorage.setItem("token", response.data.token);
+      if (form.instructor) {
+        navigate("/instructor/details", { state: { email: form.email } });
+      } else {
+        if (response.data.ok) {
+          setTimeout(() => {
+            props.login(response.data.token, response.data.user);
+            navigate("/");
+          }, 2000);
+        }
       }
     } catch (error) {
       console.log(error);

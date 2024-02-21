@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, NavLink, Outlet } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+
+import("../App.css");
 import("../views/dashboard.css");
 
 const CreateClass = (props) => {
@@ -44,22 +47,41 @@ const CreateClass = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
+    const decodedToken = jwtDecode(token);
+    const instructorId = decodedToken.userId;
+    const dataToSend = {
+      ...classData,
+      instructorId: instructorId,
+    };
     try {
+      debugger;
       const response = await axios.post(
         "http://localhost:5010/class/add",
-        classData,
+        dataToSend,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${JSON.parse(token)}`,
           },
-          body: JSON.stringify(classData),
         }
       );
+      console.log(classData);
       console.log(response);
       if (response.data.ok) {
         alert("Class created successfully");
+        setClassData({
+          title: "",
+          description: "",
+          location: "",
+          date: "",
+          time: "",
+          duration: "",
+          capacity: "",
+          price: "",
+        });
+
+        navigate("/instructor/dashboard");
       } else {
         alert("Failed to create class");
       }
@@ -71,8 +93,30 @@ const CreateClass = (props) => {
   return (
     <div className="secret_page">
       <div className="dashboard">
+        <div className="dashboard">
+          <div className="sidebar">
+            <NavLink
+              to="/instructor/dashboard"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              Home
+            </NavLink>
+            <NavLink
+              to="/instructor/classes"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              Classes
+            </NavLink>
+            <NavLink
+              to="/instructor/profile"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              Profile
+            </NavLink>
+          </div>
+          <Outlet /> {/* React Router v6 Outlet for nested routes */}
+        </div>
         <div className="content">
-          {/* Placeholder for the profile picture and other content */}
           <form onSubmit={handleSubmit} className="createClassForm">
             <select
               name="category_id"

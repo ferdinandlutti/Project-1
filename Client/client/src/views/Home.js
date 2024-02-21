@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../images/background.jpg";
+import axios from "axios";
 
 import "../App.css";
 
@@ -18,21 +19,18 @@ function Home() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         "http://localhost:5010/category/allcategories"
       );
-      const data = await response.json();
-      console.log(data); // Log the entire response
-      setCategories(data.data); // Assuming your backend returns categories in a `data` field
+      setCategories(response.data.data); // Assuming your backend returns categories in a `data` field
     } catch (error) {
       console.error("Failed to fetch categories:", error);
     }
   };
   const fetchRecentClasses = async () => {
     try {
-      const response = await fetch("http://localhost:5010/class/recent");
-      const data = await response.json();
-      setRecentClasses(data.data);
+      const response = await axios.get("http://localhost:5010/class/recent");
+      setRecentClasses(response.data.data);
     } catch (error) {
       console.error("Failed to fetch recent classes:", error);
     }
@@ -40,6 +38,10 @@ function Home() {
 
   const handleCategoryClick = (categoryId) => {
     navigate(`/category/by-category/${categoryId}`);
+  };
+
+  const handleClassClick = (classId) => {
+    navigate(`/class/${classId}`);
   };
 
   const handleSearchChange = (e) => {
@@ -84,11 +86,14 @@ function Home() {
         <h2>Recently Added Classes</h2>
         <div className="recentClasses">
           {recentClasses.map((classItem) => (
-            <div className="classItem" key={classItem._id}>
+            <div
+              className="classItem"
+              key={classItem._id}
+              onClick={() => handleClassClick(classItem._id)}
+            >
               <p>{classItem.category}</p>
               <h3>{classItem.title}</h3>
               <p>{classItem.description}</p>
-              {/* Display more details as needed */}
             </div>
           ))}
         </div>

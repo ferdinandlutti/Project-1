@@ -63,6 +63,8 @@ const reviewRouter = require("./routes/reviews");
 app.use("/review", reviewRouter);
 const categoriesRouter = require("./routes/categories");
 app.use("/category", categoriesRouter);
+const instructorRouter = require("./routes/instructor");
+app.use("/instructor", instructorRouter);
 
 // initialize adminjs
 const admin = new AdminJS(adminOptions);

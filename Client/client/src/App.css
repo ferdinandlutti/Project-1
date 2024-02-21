@@ -96,3 +96,6 @@
 .formButton:hover {
   background-color: #0056b3;
 }
+.classItem:hover {
+  cursor: pointer;
+}

@@ -9,6 +9,8 @@ router.get("/recent", controller.getRecentClasses);
 
 router.get("/:id", controller.getClassById);
 
+router.get("/byinstructor/:id", controller.getInstructorClasses);
+
 router.post("/add", authenticate, controller.addClass);
 
 router.put("/:id", controller.updateClass);

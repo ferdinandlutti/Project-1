@@ -109,11 +109,35 @@ const updateBookingStatus = async (req, res) => {
       .json({ ok: false, message: "Error updating booking status", error });
   }
 };
+const getBookingsByUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const bookings = await Booking.find({ userId }).populate("classId"); // Assuming each booking references 'classId' for class details
+
+    if (bookings.length === 0) {
+      return res
+        .status(404)
+        .json({ ok: false, message: "No bookings found for this user." });
+    }
+
+    res.json({ ok: true, data: bookings });
+  } catch (error) {
+    console.error("Failed to fetch bookings:", error);
+    res
+      .status(500)
+      .json({
+        ok: false,
+        message: "Error fetching bookings",
+        error: error.message,
+      });
+  }
+};
 
 module.exports = {
   createBooking,
   deleteBooking,
   getBookingsByClass,
   updateBookingStatus,
+  getBookingsByUser,
   //   getAllBookings,
 };
