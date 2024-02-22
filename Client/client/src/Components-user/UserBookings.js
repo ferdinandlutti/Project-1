@@ -63,6 +63,17 @@ function UserBookings() {
           bookings.map((booking) => (
             <div key={booking._id}>
               <h3>{booking.classId.title}</h3>
+              {booking.classId.selectedImage && (
+                <img
+                  src={booking.classId.selectedImage}
+                  alt={booking.classId.title}
+                  style={{
+                    width: "50%",
+                    maxHeight: "300px",
+                    objectFit: "cover",
+                  }}
+                />
+              )}{" "}
               <p>Date: {new Date(booking.classId.date).toLocaleDateString()}</p>
               <p>Time: {booking.classId.time}</p>
               {/* Add more details as needed */}

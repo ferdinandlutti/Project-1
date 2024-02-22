@@ -3,14 +3,12 @@ const User = require("../Schemas/Users");
 
 const instructorDetails = async (req, res) => {
   const userId = req.userId;
-  const { bio, location } = req.body;
-  const profilePicture = req.file.path; // Assuming you want the file path
+  const { bio, location, profilePicture } = req.body;
 
   try {
     let instructor = await Instructor.findOne({ userId });
 
     if (instructor) {
-      // Update existing instructor details
       instructor = await Instructor.findOneAndUpdate(
         userId,
         { bio, location, profilePicture },
@@ -44,13 +42,12 @@ const updateProfile = async (req, res) => {
   const { email, password, bio, location, profilePicture } = req.body;
 
   try {
-    // Update User collection
-    const userUpdateFields = { email, password }; // Only include fields that are part of the User schema
+    const userUpdateFields = { email, password };
     const updatedUser = await User.findByIdAndUpdate(userId, userUpdateFields, {
       new: true,
     });
 
-    const instructorUpdateFields = { bio, location, profilePicture }; // Only include fields that are part of the Instructor schema
+    const instructorUpdateFields = { bio, location, profilePicture };
     const updatedInstructor = await Instructor.findOneAndUpdate(
       { userId },
       instructorUpdateFields,
@@ -82,7 +79,7 @@ const instructorProfile = async (req, res) => {
       userId: instructorId,
     }).populate({
       path: "userId",
-      select: "email", // Only fetch the email from the User collection
+      select: "email name surname",
     });
 
     if (!instructorDetails) {
@@ -91,13 +88,15 @@ const instructorProfile = async (req, res) => {
         .json({ ok: false, message: "Instructor not found" });
     }
 
-    // Exclude sensitive fields like password before sending response
     const profileData = {
-      email: instructorDetails.userId.email, // Access email from populated user data
+      email: instructorDetails.userId.email,
+      name: instructorDetails.userId.name,
+      surname: instructorDetails.userId.surname,
       bio: instructorDetails.bio,
       location: instructorDetails.location,
+      profilePicture: instructorDetails.profilePicture,
     };
-
+    console.log(profileData);
     res.json({ ok: true, profile: profileData });
   } catch (error) {
     res.status(500).json({

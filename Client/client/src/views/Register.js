@@ -8,6 +8,8 @@ const Register = (props) => {
     email: "",
     password: "",
     password2: "",
+    name: "",
+    surname: "",
     instructor: false,
   });
   const [message, setMessage] = useState("");
@@ -29,6 +31,8 @@ const Register = (props) => {
         email: form.email,
         password: form.password,
         password2: form.password2,
+        name: form.name,
+        surname: form.surname,
         instructor: form.instructor,
       });
       setMessage(response.data.message);
@@ -66,6 +70,10 @@ const Register = (props) => {
 
       <label>Repeat password</label>
       <input name="password2" value={form.password2} onChange={handleChange} />
+      <label>Name</label>
+      <input name="name" value={form.name} onChange={handleChange} />
+      <label>Surname</label>
+      <input name="surname" value={form.surname} onChange={handleChange} />
       <label>Register as instructor</label>
       <input type="checkbox" name="instructor" onChange={handleChange} />
       <button type="submit">register</button>

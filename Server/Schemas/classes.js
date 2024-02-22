@@ -5,7 +5,7 @@ const classSchema = new mongoose.Schema(
   {
     instructorId: {
       type: Schema.Types.ObjectId,
-      ref: "user", //user-collection with instructor profiles
+      ref: "user",
       required: true,
     },
     category_id: {
@@ -51,6 +51,7 @@ const classSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    selectedImage: { type: String },
   },
   { timestamps: true }
 );

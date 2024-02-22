@@ -40,6 +40,7 @@ const addClass = async (req, res) => {
       duration,
       capacity,
       price,
+      selectedImage,
     } = req.body;
 
     const newClass = await Classes.create({
@@ -53,6 +54,7 @@ const addClass = async (req, res) => {
       duration,
       capacity,
       price,
+      selectedImage,
     });
     res.send({
       ok: true,
@@ -93,9 +95,11 @@ const getInstructorClasses = async (req, res) => {
     ); // Assuming you want to include details of the category
 
     if (!instructorClasses || instructorClasses.length === 0) {
-      return res
-        .status(404)
-        .json({ ok: false, message: "No classes found for this instructor." });
+      return res.json({
+        ok: true,
+        message: "No classes found for this instructor.",
+        data: [],
+      });
     }
 
     res.json({ ok: true, data: instructorClasses });

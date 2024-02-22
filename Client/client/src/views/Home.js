@@ -22,7 +22,7 @@ function Home() {
       const response = await axios.get(
         "http://localhost:5010/category/allcategories"
       );
-      setCategories(response.data.data); // Assuming your backend returns categories in a `data` field
+      setCategories(response.data.data);
     } catch (error) {
       console.error("Failed to fetch categories:", error);
     }
@@ -93,6 +93,17 @@ function Home() {
             >
               <p>{classItem.category}</p>
               <h3>{classItem.title}</h3>
+              {classItem.selectedImage && (
+                <img
+                  src={classItem.selectedImage}
+                  alt={classItem.title}
+                  style={{
+                    width: "100%",
+                    maxHeight: "200px",
+                    objectFit: "cover",
+                  }}
+                />
+              )}{" "}
               <p>{classItem.description}</p>
             </div>
           ))}

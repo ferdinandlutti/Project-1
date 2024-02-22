@@ -11,7 +11,7 @@ import Navbar from "./Components-Instructor/Navbar";
 import Home from "./views/Home";
 import Register from "./views/Register";
 import Login from "./views/Login";
-import Dashboard from "./views/Dashboard";
+import Dashboard from "./Components-Instructor/InstructorDashboard";
 import { URL } from "./config";
 import * as jose from "jose";
 import ClassesByCategory from "./Components-Instructor/ClassesByCategory";
@@ -22,6 +22,11 @@ import UserProfile from "./Components-user/UserProfile";
 import UserBookings from "./Components-user/UserBookings";
 import UserSettings from "./Components-user/UserSettings";
 import ClassPage from "./Components-user/ClassPage";
+import InstructorClasses from "./Components-Instructor/instructorClasses";
+import InstructorClassPage from "./Components-Instructor/ClassPage";
+import InstructorEditClassPage from "./Components-Instructor/InstructorEditClassPage";
+import PreviousClasses from "./Components-Instructor/PreviousClasses";
+import UpcomingClasses from "./Components-Instructor/UpcomingClasses";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,7 +36,7 @@ function App() {
   useEffect(() => {
     const verify_token = async () => {
       try {
-        console.log("Verifying token:", token); // Log the token being verified
+        console.log("Verifying token:", token);
 
         if (!token) {
           setIsLoggedIn(false);
@@ -50,7 +55,6 @@ function App() {
   const login = (token) => {
     let decodedToken = jose.decodeJwt(token);
     console.log(decodedToken);
-    // composing a user object based on what data we included in our token (login controller - jwt.sign() first argument)
     let user = {
       email: decodedToken.userEmail,
       type: decodedToken.userType, // Access 'userType' from the decoded token
@@ -79,6 +83,27 @@ function App() {
         <Route path="/instructor/dashboard" element={<Dashboard />}></Route>
         <Route path="/instructor/classes" element={<CreateClass />} />
         <Route path="/instructor/profile" element={<InstructorProfile />} />
+        <Route
+          path="/instructor/classes/myclasses"
+          element={<InstructorClasses />}
+        />
+        <Route
+          path="/instructor/classes/previousclasses"
+          element={<PreviousClasses />}
+        />
+        <Route
+          path="/instructor/classes/upcomingclasses"
+          element={<UpcomingClasses />}
+        />
+
+        <Route
+          path="/instructor/class/:classId"
+          element={<InstructorClassPage />}
+        />
+        <Route
+          path="/instructor/class/edit/:classId"
+          element={<InstructorEditClassPage />}
+        />
 
         <Route
           path="/login"

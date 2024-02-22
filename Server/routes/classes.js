@@ -13,8 +13,8 @@ router.get("/byinstructor/:id", controller.getInstructorClasses);
 
 router.post("/add", authenticate, controller.addClass);
 
-router.put("/:id", controller.updateClass);
+router.put("/edit/:id", controller.updateClass);
 
-router.delete("/:id", controller.deleteClass);
+router.delete("/delete/:id", controller.deleteClass);
 
 module.exports = router;

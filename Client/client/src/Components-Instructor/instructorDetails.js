@@ -8,50 +8,61 @@ const InstructorDetails = () => {
   const [details, setDetails] = useState({
     bio: "",
     location: "",
-    profilePicture: null,
+    imageUrl: "",
   });
   const navigate = useNavigate();
-
-  const handleFileChange = (e) => {
-    setDetails({ ...details, profilePicture: e.target.files[0] });
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDetails({ ...details, [name]: value });
   };
+  const openCloudinaryWidget = () => {
+    console.log(process.env.REACT_APP_CLOUD_NAME);
+    console.log(process.env.REACT_APP_UPLOAD_PRESET);
+    window.cloudinary.openUploadWidget(
+      {
+        cloudName: process.env.REACT_APP_CLOUD_NAME,
+        uploadPreset: process.env.REACT_APP_UPLOAD_PRESET,
+        tags: ["instructor"],
+      },
+      (error, result) => {
+        if (!error && result && result.event === "success") {
+          setDetails({ ...details, imageUrl: result.info.secure_url });
+        }
+      }
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("bio", details.bio);
-    formData.append("location", details.location);
-    if (details.profilePicture) {
-      formData.append("profilePicture", details.profilePicture);
-    }
     const token = localStorage.getItem("token");
     if (!token) {
       alert("You must be logged in to perform this action.");
+      navigate("/login");
       return;
     }
     const decodedToken = jwtDecode(token);
     const userId = decodedToken.userId;
-
-    // Add the userId to formData if your backend expects it
-    formData.append("userId", userId);
-
+    const requestBody = {
+      ...details,
+      userId,
+      profilePicture: details.imageUrl,
+    };
     try {
-      const response = await axios.post(`${URL}/instructor/details`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
+      const response = await axios.post(
+        `${URL}/instructor/details`,
+        requestBody,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
       if (response.data.ok) {
         alert("Instructor details created successfully");
-        navigate("/instructor/dashboard"); // Or any other page you want to navigate to
+        navigate("/instructor/dashboard");
       } else {
         alert("Failed to create instructor details");
       }
@@ -65,7 +76,6 @@ const InstructorDetails = () => {
     <div>
       <h2>Complete Your Instructor Profile</h2>
       <form onSubmit={handleSubmit}>
-        {/* Form inputs remain the same */}
         <label htmlFor="bio">Bio:</label>
         <textarea
           id="bio"
@@ -84,15 +94,9 @@ const InstructorDetails = () => {
           onChange={handleChange}
           required
         />
-
-        <label htmlFor="profilePicture">Profile Picture:</label>
-        <input
-          id="profilePicture"
-          name="profilePicture"
-          type="file"
-          onChange={handleFileChange}
-        />
-
+        <button type="button" onClick={openCloudinaryWidget}>
+          Upload Profile Picture
+        </button>
         <button type="submit">Submit</button>
       </form>
     </div>

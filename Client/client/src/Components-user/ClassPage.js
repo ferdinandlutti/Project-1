@@ -74,10 +74,20 @@ function ClassPage() {
     <div>
       <h1>{classDetails.title}</h1>
       <p>
-        <p>
-          <strong>Category:</strong> {categoryName}
-        </p>
+        <strong>Category:</strong> {categoryName}
       </p>
+      {classDetails.selectedImage && (
+        <img
+          src={classDetails.selectedImage}
+          alt={classDetails.title}
+          style={{
+            width: "50%",
+            maxHeight: "400px",
+            objectFit: "cover",
+          }}
+        />
+      )}{" "}
+      <p></p>
       <p>
         <strong>Description:</strong> {classDetails.description}
       </p>

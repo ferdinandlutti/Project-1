@@ -12,8 +12,8 @@ const jwt_secret = process.env.JWT_SECRET;
 // Register
 const register = async (req, res, next) => {
   const salt = "914donkey";
-  const { email, password, password2, instructor } = req.body;
-  if (!email || !password || !password2) {
+  const { email, password, password2, name, surname, instructor } = req.body;
+  if (!email || !password || !password2 || !name || !surname) {
     return res.json({ ok: false, message: "All fields required" });
   }
   if (password !== password2) {
@@ -35,6 +35,8 @@ const register = async (req, res, next) => {
     const newUser = {
       email,
       password: hash,
+      name,
+      surname,
       type: instructor ? "instructor" : "user",
     };
     await User.create(newUser);
@@ -45,11 +47,6 @@ const register = async (req, res, next) => {
     res.json({ ok: false, error });
   }
 };
-// the client is sending this body object
-//  {
-//     email: form.email,
-//     password: form.password
-//  }
 // Login
 const login = async (req, res) => {
   const { email, password } = req.body;

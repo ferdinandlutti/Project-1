@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { URL } from "../config";
-import { useNavigate, NavLink, Outlet } from "react-router-dom";
+import { useNavigate, NavLink, Outlet, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 const InstructorProfile = () => {
@@ -9,7 +9,7 @@ const InstructorProfile = () => {
     bio: "",
     location: "",
     email: "",
-    profilePicture: null,
+    profilePicture: "",
   });
   const navigate = useNavigate();
 
@@ -39,24 +39,32 @@ const InstructorProfile = () => {
     }
   };
 
-  const handleFileChange = (e) => {
-    setProfileData({ ...profileData, [e.target.name]: e.target.files[0] });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData({ ...profileData, [name]: e.target.value });
   };
 
-  const handleChange = (e) => {
-    setProfileData({ ...profileData, [e.target.name]: e.target.value });
+  const openCloudinaryUploadWidget = () => {
+    window.cloudinary.openUploadWidget(
+      {
+        cloudName: process.env.REACT_APP_CLOUD_NAME,
+        uploadPreset: process.env.REACT_APP_UPLOAD_PRESET,
+        tags: ["instructorProfile"],
+      },
+      (error, result) => {
+        if (!error && result && result.event === "success") {
+          setProfileData({
+            ...profileData,
+            profilePicture: result.info.secure_url,
+          });
+        }
+      }
+    );
   };
 
   const handleSubmit = async (e) => {
-    debugger;
     e.preventDefault();
-    // let formData = new FormData();
-    // formData.append("bio", profileData.bio);
-    // formData.append("location", profileData.location);
-    // if (profileData.profilePicture) {
-    //   formData.append("profilePicture", profileData.profilePicture);
-    // }
-    // console.log(profileData);
+
     try {
       const token = localStorage.getItem("token");
       const decodedToken = jwtDecode(token);
@@ -78,6 +86,17 @@ const InstructorProfile = () => {
       alert("Failed to update profile");
     }
   };
+  console.log(profileData);
+
+  const [isClassesDropdownVisible, setIsClassesDropdownVisible] =
+    useState(false);
+  const location = useLocation();
+
+  const toggleClassesDropdown = () => {
+    setIsClassesDropdownVisible(!isClassesDropdownVisible);
+  };
+
+  const isClassesSection = location.pathname.startsWith("/instructor/classes");
 
   return (
     <div className="dashboard">
@@ -88,12 +107,40 @@ const InstructorProfile = () => {
         >
           Home
         </NavLink>
-        <NavLink
-          to="/instructor/classes"
-          className={({ isActive }) => (isActive ? "active" : "")}
-        >
+        <div onClick={toggleClassesDropdown} className="dropdown-toggle">
           Classes
-        </NavLink>
+        </div>
+        <div
+          className={`dropdown-content ${
+            isClassesDropdownVisible || isClassesSection ? "show" : ""
+          }`}
+        >
+          <NavLink
+            to="/instructor/classes"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Create Class
+          </NavLink>
+          <NavLink
+            to="/instructor/classes/myclasses"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            My Classes
+          </NavLink>
+          <NavLink
+            to="/instructor/classes/previousclasses"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Previous Classes
+          </NavLink>
+          <NavLink
+            to="/instructor/classes/upcomingclasses"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Upcoming Classes
+          </NavLink>
+        </div>
+
         <NavLink
           to="/instructor/profile"
           className={({ isActive }) => (isActive ? "active" : "")}
@@ -130,11 +177,10 @@ const InstructorProfile = () => {
           </div>
           <div>
             <label>Profile Picture:</label>
-            <input
-              type="file"
-              name="profilePicture"
-              onChange={handleFileChange}
-            />
+            <button type="button" onClick={openCloudinaryUploadWidget}>
+              Upload Profile Picture
+            </button>
+
             {profileData.profilePicture && (
               <div>
                 <img

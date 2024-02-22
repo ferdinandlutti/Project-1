@@ -1,0 +1,93 @@
+.dashboard {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #f0f0f0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.sidebar a,
+.dropdown-toggle {
+  display: block;
+  padding: 10px;
+  margin: 5px 0;
+  text-decoration: none;
+  color: black;
+  border-radius: 4px;
+}
+
+.sidebar a:hover,
+.dropdown-toggle:hover {
+  background-color: #ddd;
+}
+
+.sidebar a.active {
+  background-color: #3e4853;
+  color: white;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.dropdown-toggle {
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  padding-left: 20px;
+}
+
+.dropdown-content a {
+  padding-left: 30px;
+}
+
+/* To show the dropdown content when .dropdown-toggle is clicked, 
+   you will need to toggle a class that sets display to block for .dropdown-content.
+   Here is an example of what that class might look like: */
+
+.dropdown-content.show {
+  display: block;
+}
+.imageSelection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 10px;
+  border: 1px solid #ccc; /* Optional */
+  margin-bottom: 20px; /* Spacing between selection and preview */
+}
+
+.imageOption {
+  width: 100px; /* Adjust based on your preference */
+  height: 100px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent; /* No border by default */
+  transition: transform 0.3s ease, border-color 0.3s ease; /* Smooth transition for transform and border color */
+}
+
+.imageOption:hover {
+  transform: scale(1.5); /* Scale up the image a bit */
+  border-color: blue; /* Optional: also change border color on hover */
+}
+
+.imageOption.selected {
+  border-color: blue; /* Highlight selected image */
+  transform: scale(1.1); /* Keep the selected image scaled up */
+}
+
+.selectedImagePreview img {
+  width: 100px; /* Small preview */
+  height: 100px;
+  object-fit: cover;
+}
