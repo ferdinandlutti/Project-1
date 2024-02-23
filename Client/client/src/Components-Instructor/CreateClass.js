@@ -118,7 +118,7 @@ const CreateClass = (props) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${JSON.parse(token)}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );

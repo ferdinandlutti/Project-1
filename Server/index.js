@@ -65,6 +65,8 @@ const categoriesRouter = require("./routes/categories");
 app.use("/category", categoriesRouter);
 const instructorRouter = require("./routes/instructor");
 app.use("/instructor", instructorRouter);
+const paymentRouter = require("./routes/payment");
+app.use("/payment", paymentRouter);
 
 // initialize adminjs
 const admin = new AdminJS(adminOptions);

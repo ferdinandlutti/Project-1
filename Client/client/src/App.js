@@ -27,6 +27,10 @@ import InstructorClassPage from "./Components-Instructor/ClassPage";
 import InstructorEditClassPage from "./Components-Instructor/InstructorEditClassPage";
 import PreviousClasses from "./Components-Instructor/PreviousClasses";
 import UpcomingClasses from "./Components-Instructor/UpcomingClasses";
+import PaymentSuccess from "./containers/payment_success";
+import PaymentError from "./containers/payment_error";
+import Stripe from "./containers/stripe-page";
+import ErrorPage from "./containers/Errorpage";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,7 +41,7 @@ function App() {
     const verify_token = async () => {
       try {
         console.log("Verifying token:", token);
-
+        debugger;
         if (!token) {
           setIsLoggedIn(false);
         } else {
@@ -57,7 +61,7 @@ function App() {
     console.log(decodedToken);
     let user = {
       email: decodedToken.userEmail,
-      type: decodedToken.userType, // Access 'userType' from the decoded token
+      type: decodedToken.userType,
     };
     localStorage.setItem("token", JSON.stringify(token));
     setIsLoggedIn(true);
@@ -79,7 +83,7 @@ function App() {
           path="/category/by-category/:categoryId"
           element={<ClassesByCategory />}
         />
-        <Route path="/class/:classId" element={<ClassPage />} />
+        <Route path="/class/:classId" element={<Stripe />} />
         <Route path="/instructor/dashboard" element={<Dashboard />}></Route>
         <Route path="/instructor/classes" element={<CreateClass />} />
         <Route path="/instructor/profile" element={<InstructorProfile />} />
@@ -123,6 +127,9 @@ function App() {
         <Route path="/user/profile" element={<UserProfile />} />
         <Route path="/user/settings" element={<UserSettings />} />
 
+        <Route path="/payment/stripe" element={<Stripe />} />
+        <Route path="/payment/success" element={<PaymentSuccess />} />
+        <Route path="/booking/cancel" element={<PaymentError />} />
         <Route
           path="/register"
           element={
@@ -146,6 +153,8 @@ function App() {
             )
           }
         />
+
+        <Route path="/*" element={<ErrorPage />} />
       </Routes>
     </Router>
   );
