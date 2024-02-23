@@ -39,6 +39,7 @@ function App() {
 
   useEffect(() => {
     const verify_token = async () => {
+      debugger;
       try {
         console.log("Verifying token:", token);
         debugger;

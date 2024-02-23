@@ -34,51 +34,52 @@ const ClassPage = (props) => {
 
   const handleBookClass = async () => {
     try {
-      // debugger;
-      // const token = localStorage.getItem("token");
-      // if (!token) {
-      //   alert("You need to be signed in to book a class.");
-      //   navigate("/login");
-      //   return;
-      // }
-      // const decodedToken = jwtDecode(token);
-      // const userId = decodedToken.userId;
-      // const bookingData = {
-      //   classId: classId,
-      //   userId: userId,
-      // };
-
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("You need to be signed in to book a class.");
+        navigate("/login");
+        return;
+      }
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.userId;
+      const bookingData = {
+        classId: classId,
+        userId: userId,
+      };
+      debugger;
       const sessionResponse = await axios.post(
         `${URL}/payment/create-checkout-session`,
         {
           classId: classId,
-
+          userId: userId,
           title: classDetails.title,
           description: classDetails.description,
           price: classDetails.price,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // }
       );
-      if (sessionResponse.data.ok) {
-        localStorage.setItem(
-          "sessionId",
+      return sessionResponse.data.ok
+        ? // we save session id in localStorage to get it later
+          (localStorage.setItem(
+            "sessionId",
 
-          JSON.stringify(sessionResponse.data.sessionId)
-        );
-        // 9. If server returned ok after making a session we run redirect() and pass id of the session to the actual checkout / payment form
-        redirect(sessionResponse.data.sessionId);
-      } else {
-        navigate("/payment/error");
-      }
+            JSON.stringify(sessionResponse.data.sessionId)
+          ),
+          // 9. If server returned ok after making a session we run redirect() and pass id of the session to the actual checkout / payment form
+          redirect(sessionResponse.data.sessionId))
+        : navigate("/payment/error");
     } catch (error) {
       navigate("/payment/error");
     }
   };
-
+  if (!stripe) {
+    console.log("Stripe has not been initialized");
+    return;
+  }
   const redirect = (sessionId) => {
     debugger;
     // 10. This redirects to checkout.stripe.com and if charge/payment was successful send user to success url defined in create_checkout_session in the controller (which in our case renders payment_success.js)
@@ -90,7 +91,6 @@ const ClassPage = (props) => {
         sessionId: sessionId,
       })
       .then(function (result) {
-        console.log(result);
         // If `redirectToCheckout` fails due to a browser or network
         // error, display the localized error message to your customer
         // using `result.error.message`.
