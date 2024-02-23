@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import "./user.css";
 
 function ClassPage() {
   const [classDetails, setClassDetails] = useState(null);
@@ -55,6 +56,7 @@ function ClassPage() {
           },
         }
       );
+      console.log(response);
       if (response.data.ok) {
         alert("Booking successful!");
         navigate("/user/bookings");
@@ -71,7 +73,7 @@ function ClassPage() {
     return <div>Loading...</div>;
   }
   return (
-    <div>
+    <div className="class-details">
       <h1>{classDetails.title}</h1>
       <p>
         <strong>Category:</strong> {categoryName}
@@ -91,6 +93,17 @@ function ClassPage() {
       <p>
         <strong>Description:</strong> {classDetails.description}
       </p>
+      <div className="instructor-info">
+        <img
+          src={classDetails.instructorProfilePicture}
+          alt="Profile"
+          style={{ width: 100, height: 100, borderRadius: "50%" }}
+        />
+        <p>
+          <strong>Instructor:</strong> {classDetails.instructorId.name}{" "}
+          {classDetails.instructorId.surname}
+        </p>
+      </div>
       <p>
         <strong>Location:</strong> {classDetails.location}
       </p>

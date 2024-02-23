@@ -105,7 +105,7 @@ const deleteUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const userId = req.params.id;
-  const updateData = req.body; // Data to update the class with
+  const updateData = req.body;
   console.log(userId);
   try {
     const updatedUser = await User.findByIdAndUpdate(userId, updateData, {

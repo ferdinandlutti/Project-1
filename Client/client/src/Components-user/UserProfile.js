@@ -29,27 +29,24 @@ const UserProfile = () => {
         const userDetailsResponse = await axios.get(`${URL}/user/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        if (userDetailsResponse.data.ok) {
+        if (userDetailsResponse.status === 200) {
           setUserInfo((prevInfo) => ({
             ...prevInfo,
-            name: userDetailsResponse.data.details.name,
-            surname: userDetailsResponse.data.details.surname,
+            name: userDetailsResponse.data.name,
+            surname: userDetailsResponse.data.surname,
           }));
         }
-
+        console.log(userDetailsResponse);
         // Fetch user bookings
         const userBookingsResponse = await axios.get(
-          `${URL}/booking/byuser/${userId}`,
+          `${URL}/booking/by_user/${userId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-
         if (userBookingsResponse.data.ok) {
-          // Filter for upcoming bookings
-          const upcomingBookings = userBookingsResponse.data.bookings.filter(
-            (booking) => new Date(booking.date) > new Date()
+          const upcomingBookings = userBookingsResponse.data.data.filter(
+            (booking) => new Date(booking.classId.date) > new Date()
           );
           setUserInfo((prevInfo) => ({
             ...prevInfo,

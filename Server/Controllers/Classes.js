@@ -41,6 +41,9 @@ const addClass = async (req, res) => {
       capacity,
       price,
       selectedImage,
+      name,
+      surname,
+      instructorProfilePicture,
     } = req.body;
 
     const newClass = await Classes.create({
@@ -55,6 +58,9 @@ const addClass = async (req, res) => {
       capacity,
       price,
       selectedImage,
+      name,
+      surname,
+      instructorProfilePicture,
     });
     res.send({
       ok: true,

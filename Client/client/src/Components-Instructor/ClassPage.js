@@ -21,6 +21,7 @@ function InstructorClassPage() {
             },
           }
         );
+        console.log(response.data);
         setClassDetails(response.data);
         setCategoryName(response.data.category_id.category);
       } catch (error) {
@@ -57,11 +58,32 @@ function InstructorClassPage() {
   return (
     <div>
       <h1>{classDetails.title}</h1>
+      <img
+        src={classDetails.selectedImage}
+        alt={classDetails.title}
+        style={{
+          width: "50%",
+          maxHeight: "400px",
+          objectFit: "cover",
+        }}
+      />
       <p>
         <strong>Category:</strong> {categoryName}
       </p>
+
       <p>
         <strong>Description:</strong> {classDetails.description}
+      </p>
+      <div>
+        <img
+          src={classDetails.instructorProfilePicture}
+          alt="Profile"
+          style={{ width: 100, height: 100, borderRadius: "50%" }}
+        />
+      </div>
+      <p>
+        <strong>Instructor:</strong> {classDetails.instructorId.name}{" "}
+        {classDetails.instructorId.surname}
       </p>
       <p>
         <strong>Location:</strong> {classDetails.location}

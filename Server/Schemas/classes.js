@@ -52,6 +52,9 @@ const classSchema = new mongoose.Schema(
       required: true,
     },
     selectedImage: { type: String },
+    name: { type: String, required: true },
+    surname: { type: String, required: true },
+    instructorProfilePicture: { type: String },
   },
   { timestamps: true }
 );

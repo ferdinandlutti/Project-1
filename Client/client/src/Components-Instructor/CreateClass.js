@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, NavLink, Outlet, useLocation } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { URL } from "../config";
 
 import image1 from "../images/image-1.jpg";
 import image2 from "../images/image-2.jpg";
@@ -11,6 +12,7 @@ import image5 from "../images/image-5.jpg";
 import image6 from "../images/image-6.jpg";
 import image7 from "../images/image-7.jpg";
 import image8 from "../images/image-8.jpg";
+import image9 from "../images/image-9.jpg";
 
 import("./dashboard.css");
 
@@ -24,6 +26,8 @@ const CreateClass = (props) => {
     image6,
     image7,
     image8,
+    image9,
+    2,
   ];
 
   const [classData, setClassData] = useState({
@@ -36,6 +40,9 @@ const CreateClass = (props) => {
     capacity: "",
     price: "",
     selectedImage: "",
+    name: "",
+    surname: "",
+    instructorProfilePicture: "",
   });
   const [categories, setCategories] = useState([]);
   const [showImageSelection, setShowImageSelection] = useState(false);
@@ -54,7 +61,32 @@ const CreateClass = (props) => {
         console.error("Failed to fetch categories:", error);
       }
     };
+    const fetchInstructorDetails = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      const decodedToken = jwtDecode(token);
+      try {
+        const response = await axios.get(
+          `${URL}/instructor/${decodedToken.userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        console.log(response.data);
+        if (response.data.ok) {
+          setClassData((prevData) => ({
+            ...prevData,
+            name: response.data.profile.name,
+            surname: response.data.profile.surname,
+            instructorProfilePicture: response.data.profile.profilePicture, // Assuming this is how your response provides the profile picture
+          }));
+        }
+      } catch (error) {
+        console.error("Failed to fetch instructor details:", error);
+      }
+    };
     fetchCategories();
+    fetchInstructorDetails();
   }, []);
 
   let navigate = useNavigate();
@@ -104,6 +136,9 @@ const CreateClass = (props) => {
           capacity: "",
           price: "",
           selectedImage: "",
+          name: "",
+          surname: "",
+          instructorProfilePicture: "",
         });
 
         navigate("/instructor/dashboard");
