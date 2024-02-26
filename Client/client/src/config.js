@@ -1,3 +1,3 @@
-const URL = `http://localhost:5010`;
+const URL = `zenly-app.com`;
 
 export { URL };
