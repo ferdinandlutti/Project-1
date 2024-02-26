@@ -76,10 +76,7 @@ const ClassPage = (props) => {
       navigate("/payment/error");
     }
   };
-  if (!stripe) {
-    console.log("Stripe has not been initialized");
-    return;
-  }
+
   const redirect = (sessionId) => {
     debugger;
     // 10. This redirects to checkout.stripe.com and if charge/payment was successful send user to success url defined in create_checkout_session in the controller (which in our case renders payment_success.js)
