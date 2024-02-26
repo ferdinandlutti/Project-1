@@ -48,7 +48,6 @@ function App() {
       }
 
       try {
-        // Ensure the token is sent in the correct format
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         const response = await axios.post(`${URL}/user/verify_token`);
 

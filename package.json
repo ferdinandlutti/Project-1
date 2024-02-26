@@ -1,0 +1,17 @@
+{
+  "name": "zenly-app.com",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./Server/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd ./Server && node index.js",
+    "build": "cd ./Server && npm i"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

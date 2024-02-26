@@ -23,6 +23,33 @@ async function connecting() {
   }
 }
 
+const NODE_ENV = process.env.NODE_ENV; // <-- check the environment
+if (NODE_ENV === "dev") {
+  // require adminjs
+  const AdminJS = require("adminjs");
+  // require express plugin
+  const AdminJSExpress = require("@adminjs/express");
+  // require mongoose adapter
+  AdminJS.registerAdapter(require("@adminjs/mongoose"));
+  // Import all the project's models
+  const Classes = require("./Schemas/classes");
+  const Users = require("./Schemas/Users");
+  // set up options -- models to use and a route to open dashboard
+  const reviews = require("./Schemas/reviews");
+  const bookings = require("./Schemas/booking");
+  const categories = require("./Schemas/categories");
+  // set up options -- models to use and a route to open dashboard
+  const adminOptions = {
+    resources: [Classes, Users, reviews, bookings, categories],
+    rootPath: "/admin",
+  };
+  // initialize adminjs
+  const admin = new AdminJS(adminOptions);
+  // build admin route
+  const router = AdminJSExpress.buildRouter(admin);
+  app.use(admin.options.rootPath, router);
+  // end ADMINJS
+}
 // const categoriesRouter = require("./routes/categories");
 
 // const productsRouter = require("./routes/products");
@@ -35,19 +62,10 @@ async function connecting() {
 // first install adminjs and the dependencies
 // npm i adminjs @adminjs/express @adminjs/mongoose  tslib express-formidable express-session
 
-// require adminjs
-const AdminJS = require("adminjs");
-// require express plugin
-const AdminJSExpress = require("@adminjs/express");
 // require mongoose adapter
 AdminJS.registerAdapter(require("@adminjs/mongoose"));
 // Import all the project's models
-const Classes = require("./Schemas/classes"); // replace this for your model
-const Users = require("./Schemas/Users"); // replace this for your model
-// set up options -- models to use and a route to open dashboard
-const reviews = require("./Schemas/reviews");
-const bookings = require("./Schemas/booking");
-const categories = require("./Schemas/categories");
+
 const adminOptions = {
   resources: [Classes, Users, reviews, bookings, categories],
   rootPath: "/admin",
@@ -67,6 +85,14 @@ const instructorRouter = require("./routes/instructor");
 app.use("/instructor", instructorRouter);
 const paymentRouter = require("./routes/payment");
 app.use("/payment", paymentRouter);
+const path = require("path");
+
+app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, "../client/build")));
+
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+});
 
 // initialize adminjs
 const admin = new AdminJS(adminOptions);

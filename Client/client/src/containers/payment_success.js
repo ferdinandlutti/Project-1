@@ -16,8 +16,6 @@ const PaymentSuccess = () => {
       }
       // 11. Now when payment was successful we need to get back to Stripe to know what was paid for and who is the customer
       try {
-        debugger;
-
         // 12. we get the session id from the localStorage
         const sessionId = JSON.parse(localStorage.getItem("sessionId"));
         // 13. And send request to checkout_session controller to get info from Stripe by session ID
@@ -56,7 +54,7 @@ const PaymentSuccess = () => {
           },
         }
       );
-
+      console.log(bookingResponse);
       if (bookingResponse.data.ok) {
         alert("Booking successful!");
         navigate("/user/bookings");
