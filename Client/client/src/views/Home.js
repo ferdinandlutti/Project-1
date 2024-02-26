@@ -53,7 +53,7 @@ function Home() {
   );
 
   const backgroundStyle = {
-    backgroundImage: `url(${backgroundImage})`,
+    backgroundImage: `(${backgroundImage})`,
     backgroundSize: "contain",
     backgroundPosition: "center center",
     height: "600px",
