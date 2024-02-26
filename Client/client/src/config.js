@@ -1,3 +1,3 @@
-const URL = `zenly-app.com`;
+const URL = `https://eager-puce-barnacle.cyclic.app`;
 
 export { URL };
