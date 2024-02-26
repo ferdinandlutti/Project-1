@@ -48,6 +48,8 @@ if (NODE_ENV === "dev") {
   // build admin route
   const router = AdminJSExpress.buildRouter(admin);
   app.use(admin.options.rootPath, router);
+  AdminJS.registerAdapter(require("@adminjs/mongoose"));
+
   // end ADMINJS
 }
 // const categoriesRouter = require("./routes/categories");
@@ -63,13 +65,8 @@ if (NODE_ENV === "dev") {
 // npm i adminjs @adminjs/express @adminjs/mongoose  tslib express-formidable express-session
 
 // require mongoose adapter
-AdminJS.registerAdapter(require("@adminjs/mongoose"));
 // Import all the project's models
 
-const adminOptions = {
-  resources: [Classes, Users, reviews, bookings, categories],
-  rootPath: "/admin",
-};
 const classRouter = require("./routes/classes");
 app.use("/class", classRouter);
 
@@ -95,10 +92,7 @@ app.get("/*", function (req, res) {
 });
 
 // initialize adminjs
-const admin = new AdminJS(adminOptions);
 // build admin route
-const router = AdminJSExpress.buildRouter(admin);
-app.use(admin.options.rootPath, router);
 // end ADMINJS
 connecting().then(() => {
   app.listen(port, () => console.log(`listening on port ${port}`));

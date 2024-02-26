@@ -62,16 +62,19 @@ const ClassPage = (props) => {
           },
         }
       );
-      return sessionResponse.data.ok
-        ? // we save session id in localStorage to get it later
-          (localStorage.setItem(
-            "sessionId",
+      if (sessionResponse.data.ok) {
+        // Create an object to store both sessionId and classId
+        const sessionInfo = {
+          sessionId: sessionResponse.data.sessionId,
+          classId: classId, // Store classId for later use
+        };
+        localStorage.setItem("sessionInfo", JSON.stringify(sessionInfo));
 
-            JSON.stringify(sessionResponse.data.sessionId)
-          ),
-          // 9. If server returned ok after making a session we run redirect() and pass id of the session to the actual checkout / payment form
-          redirect(sessionResponse.data.sessionId))
-        : navigate("/payment/error");
+        // Redirect to Stripe Checkout using the sessionId
+        redirect(sessionResponse.data.sessionId);
+      } else {
+        navigate("/payment/error");
+      }
     } catch (error) {
       navigate("/payment/error");
     }
