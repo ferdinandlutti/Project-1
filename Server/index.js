@@ -85,10 +85,10 @@ app.use("/payment", paymentRouter);
 const path = require("path");
 
 app.use(express.static(__dirname));
-app.use(express.static(path.join(__dirname, "../client/build")));
+app.use(express.static(path.join(__dirname, "../Client/client/build")));
 
 app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+  res.sendFile(path.join(__dirname, "../Client/client/build", "index.html"));
 });
 
 // initialize adminjs

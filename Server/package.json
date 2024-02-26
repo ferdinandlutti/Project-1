@@ -9,9 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@adminjs/express": "^5.0.1",
-    "@adminjs/mongoose": "^3.0.1",
-    "adminjs": "^6.6.5",
     "argon2": "^0.31.2",
     "cloudinary": "^2.0.1",
     "cors": "^2.8.5",
@@ -20,6 +17,12 @@
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.1.2",
-    "stripe": "^14.18.0"
+    "stripe": "^14.18.0",
+    "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "@adminjs/express": "^6.1.0",
+    "@adminjs/mongoose": "^4.0.0",
+    "adminjs": "^7.6.1"
   }
 }
