@@ -19,10 +19,5 @@
     "mongoose": "^8.1.2",
     "stripe": "^14.18.0",
     "validator": "^13.11.0"
-  },
-  "devDependencies": {
-    "@adminjs/express": "^6.1.0",
-    "@adminjs/mongoose": "^4.0.0",
-    "adminjs": "^7.6.1"
   }
 }
