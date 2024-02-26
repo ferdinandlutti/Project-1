@@ -77,12 +77,29 @@ const login = async (req, res) => {
 };
 // verify token
 const verify_token = (req, res) => {
-  console.log(req.headers.authorization);
-  const token = req.headers.authorization;
-  jwt.verify(token, jwt_secret, (err, succ) => {
-    err
-      ? res.json({ ok: false, message: "Token is corrupted" })
-      : res.json({ ok: true, succ });
+  // Extract the token from the Authorization header
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.json({
+      ok: false,
+      message: "Authorization header is missing or not correctly formatted",
+    });
+  }
+
+  const token = authHeader.split(" ")[1]; // Get the token part
+
+  jwt.verify(token, jwt_secret, (err, decodedToken) => {
+    if (err) {
+      console.error("Token verification error:", err);
+      return res.json({ ok: false, message: "Token is corrupted or expired" });
+    }
+    // Optionally, you can attach the decoded token to the request if you want to use it later in the chain
+    req.user = decodedToken;
+    return res.json({
+      ok: true,
+      message: "Token is valid",
+      user: decodedToken,
+    });
   });
 };
 

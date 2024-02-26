@@ -31,6 +31,7 @@ import PaymentSuccess from "./containers/payment_success";
 import PaymentError from "./containers/payment_error";
 import Stripe from "./containers/stripe-page";
 import ErrorPage from "./containers/Errorpage";
+import { jwtDecode } from "jwt-decode";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -38,36 +39,47 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
-    const verify_token = async () => {
-      debugger;
+    const verifyToken = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.log("No token found, not logged in.");
+        setIsLoggedIn(false);
+        return;
+      }
+
       try {
-        console.log("Verifying token:", token);
-        debugger;
-        if (!token) {
-          setIsLoggedIn(false);
+        // Ensure the token is sent in the correct format
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        const response = await axios.post(`${URL}/user/verify_token`);
+
+        if (response.data.ok) {
+          login(token); // Proceed with login if token verification is successful
         } else {
-          axios.defaults.headers.common["Authorization"] = token;
-          const response = await axios.post(`${URL}/user/verify_token`);
-          console.log(response.data.ok);
-          return response.data.ok ? login(token) : logout();
+          logout(); // Logout if token is invalid or verification fails
         }
       } catch (error) {
-        console.log(error);
+        console.error("Error verifying token:", error);
+        logout();
       }
     };
-    verify_token();
-  }, [token]);
+
+    verifyToken();
+  }, []);
 
   const login = (token) => {
-    let decodedToken = jose.decodeJwt(token);
-    console.log(decodedToken);
-    let user = {
+    // Decode the token to get user details without verifying the signature
+    const decodedToken = jwtDecode(token);
+    console.log("Decoded token:", decodedToken);
+
+    const userData = {
       email: decodedToken.userEmail,
       type: decodedToken.userType,
     };
-    localStorage.setItem("token", JSON.stringify(token));
+
+    // Store the raw token for future API requests
+    localStorage.setItem("token", token);
     setIsLoggedIn(true);
-    setUser(user);
+    setUser(userData);
   };
 
   const logout = () => {
