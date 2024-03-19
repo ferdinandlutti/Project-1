@@ -62,7 +62,20 @@ function Home() {
 
   return (
     <div>
-      <div className="backgroundWrapper" style={backgroundStyle}>
+      <div style={{ position: "relative", height: "100vh" }}>
+        {" "}
+        {/* Container must have a defined height */}
+        <img
+          src={backgroundImage}
+          alt="Background"
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover", // This ensures the image covers the area without stretching
+            zIndex: -1, // Places the image behind other content
+          }}
+        />{" "}
         <input
           type="text"
           placeholder="Search for categories..."
@@ -70,7 +83,10 @@ function Home() {
           value={searchTerm}
           onChange={handleSearchChange}
         />
-        <div className="allcategories">
+        <div
+          className="allcategories"
+          style={{ position: "relative", zIndex: 1 }}
+        >
           {filteredCategories.map((category) => (
             <div
               className="categoryItem"
