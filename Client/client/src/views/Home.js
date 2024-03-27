@@ -54,39 +54,44 @@ function Home() {
 
   const backgroundStyle = {
     backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: "50%", // Scales the image down
+    backgroundSize: "cover",
     backgroundPosition: "center center",
-    height: "600px",
+    height: "70vh", // Ensure it covers the full view height
     width: "100%",
+    display: "flex", // Using Flexbox to center content
+    justifyContent: "center", // Horizontally center
+    alignItems: "center", // Vertically center
+    position: "relative", // Needed for absolute positioning of children if necessary
   };
 
   return (
     <div>
-      <div style={{ position: "relative", height: "100vh" }}>
-        <input
-          type="text"
-          placeholder="Search for categories..."
-          className="searchInput"
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-        <div
-          className="allcategories"
-          style={{ position: "relative", height: "100vh", ...backgroundStyle }}
-        >
-          {filteredCategories.map((category) => (
-            <div
-              className="categoryItem"
-              key={category._id}
-              onClick={() => handleCategoryClick(category._id)}
-            >
-              {category.category}
-            </div>
-          ))}
+      <div style={{ ...backgroundStyle }}>
+        <div style={{ textAlign: "center" }}>
+          {" "}
+          {/* Ensures content is centered */}
+          <input
+            type="text"
+            placeholder="Search for categories..."
+            className="searchInput"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+          <div className="allcategories" style={{ marginTop: "20px" }}>
+            {filteredCategories.map((category) => (
+              <div
+                className="categoryItem"
+                key={category._id}
+                onClick={() => handleCategoryClick(category._id)}
+              >
+                {category.category}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div className="contentWrapper">
-        <h2>Recently Added Classesdwqdw</h2>
+        <h2>Recently Added Classesd</h2>
         <div className="recentClasses">
           {recentClasses.map((classItem) => (
             <div

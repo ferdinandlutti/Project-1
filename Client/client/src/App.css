@@ -6,7 +6,7 @@
   height: 500px; /* Match the backgroundStyle height */
 }
 .searchInput {
-  width: 50%; /* Long width relative to its parent container */
+  width: 100%; /* Long width relative to its parent container */
   max-width: 600px; /* Prevents the input from becoming too wide on large screens */
   padding: 10px 20px; /* Controls height indirectly by adjusting padding */
   font-size: 16px;
