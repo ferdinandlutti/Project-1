@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import backgroundImage from "../images/background.jpg";
+import backgroundImage from "../images/yoga-image.jpg";
 import axios from "axios";
 
 import "../App.css";
