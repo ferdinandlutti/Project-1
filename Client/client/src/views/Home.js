@@ -56,7 +56,7 @@ function Home() {
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: "cover",
     backgroundPosition: "center center",
-    height: "70vh", // Ensure it covers the full view height
+    height: "40vh", // Ensure it covers the full view height
     width: "100%",
     display: "flex", // Using Flexbox to center content
     justifyContent: "center", // Horizontally center
