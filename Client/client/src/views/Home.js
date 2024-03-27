@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import backgroundImage from "../images/yoga-image.jpg";
+import backgroundImage from "../images/New-b-image.jpg";
 import axios from "axios";
 
 import "../App.css";
@@ -56,7 +56,7 @@ function Home() {
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: "cover",
     backgroundPosition: "center center",
-    height: "40vh", // Ensure it covers the full view height
+    height: "600px", // Ensure it covers the full view height
     width: "100%",
     display: "flex", // Using Flexbox to center content
     justifyContent: "center", // Horizontally center
