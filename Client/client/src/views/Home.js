@@ -86,7 +86,7 @@ function Home() {
         </div>
       </div>
       <div className="contentWrapper">
-        <h2>Recently Added Classes</h2>
+        <h2>Recently Added Classesdwqdw</h2>
         <div className="recentClasses">
           {recentClasses.map((classItem) => (
             <div

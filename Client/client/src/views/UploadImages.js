@@ -6,7 +6,6 @@ import { useState } from "react";
 const UploadImages = ({ photos, photosSetter }) => {
   const uploadWidget = (e) => {
     e.preventDefault();
-    // remember to add your credentials to the .env file
     window.cloudinary.openUploadWidget(
       {
         cloud_name: process.env.REACT_APP_CLOUD_NAME,
