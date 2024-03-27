@@ -54,7 +54,7 @@ function Home() {
 
   const backgroundStyle = {
     backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: "contain",
+    backgroundSize: "50%", // Scales the image down
     backgroundPosition: "center center",
     height: "600px",
     width: "100%",
