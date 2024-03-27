@@ -63,19 +63,6 @@ function Home() {
   return (
     <div>
       <div style={{ position: "relative", height: "100vh" }}>
-        {" "}
-        {/* Container must have a defined height */}
-        <img
-          src={backgroundImage}
-          alt="Background"
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            objectFit: "cover", // This ensures the image covers the area without stretching
-            zIndex: -1, // Places the image behind other content
-          }}
-        />{" "}
         <input
           type="text"
           placeholder="Search for categories..."
@@ -85,7 +72,7 @@ function Home() {
         />
         <div
           className="allcategories"
-          style={{ position: "relative", zIndex: 1 }}
+          style={{ position: "relative", height: "100vh", ...backgroundStyle }}
         >
           {filteredCategories.map((category) => (
             <div
@@ -99,7 +86,7 @@ function Home() {
         </div>
       </div>
       <div className="contentWrapper">
-        <h2>Recently Added Classesfff</h2>
+        <h2>Recently Added Classes</h2>
         <div className="recentClasses">
           {recentClasses.map((classItem) => (
             <div

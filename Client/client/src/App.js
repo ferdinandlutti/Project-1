@@ -13,7 +13,6 @@ import Register from "./views/Register";
 import Login from "./views/Login";
 import Dashboard from "./Components-Instructor/InstructorDashboard";
 import { URL } from "./config";
-import * as jose from "jose";
 import ClassesByCategory from "./Components-Instructor/ClassesByCategory";
 import CreateClass from "./Components-Instructor/CreateClass";
 import InstructorDetails from "./Components-Instructor/instructorDetails";
