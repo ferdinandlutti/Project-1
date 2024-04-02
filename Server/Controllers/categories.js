@@ -40,8 +40,41 @@ const getCategory = async (req, res) => {
       .json({ ok: false, message: "Error fetching category", error });
   }
 };
+const addCategory = async (req, res) => {
+  const { category } = req.body; // Assuming your category has these fields
+
+  // Basic validation to check if the required fields are provided
+  if (!category) {
+    return res.status(400).json({ ok: false, message: "Category is required" });
+  }
+
+  try {
+    // Check if the category already exists to avoid duplicates
+    const existingCategory = await Category.findOne({ category: category });
+    if (existingCategory) {
+      return res
+        .status(409)
+        .json({ ok: false, message: "Category already exists" });
+    }
+
+    // Create a new category document and save it to the database
+    const newCategory = new Category({
+      category,
+    });
+
+    await newCategory.save();
+
+    // Respond with the created category
+    res.status(201).json({ ok: true, data: newCategory });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ ok: false, message: "Error adding category", error });
+  }
+};
 module.exports = {
   getAllCategories,
   getClassesByCategory,
   getCategory,
+  addCategory,
 };
